@@ -1,0 +1,5 @@
+SOmething about needing to run it inside a "Twisted Reactor"
+
+1. Test to make sure the Path's work from the spiders
+2. Test the "reset" method from the "WatchingSpider"
+3. Test to make sure the schedule is working
