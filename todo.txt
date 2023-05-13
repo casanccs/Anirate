@@ -1,5 +1,5 @@
-SOmething about needing to run it inside a "Twisted Reactor"
-
-1. Test to make sure the Path's work from the spiders
+1. Test to make sure the Path's work from the spiders (Works because of Crawler settings)
+    - Everytime I start the server, Anirate.json gets APPENDED to instead of overwritten
+        - Fixed with "overwrite": "True"
 2. Test the "reset" method from the "WatchingSpider"
 3. Test to make sure the schedule is working

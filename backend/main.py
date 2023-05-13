@@ -5,8 +5,9 @@ from flask_cors import CORS
 import re
 import schedule
 import time
-from flask_sqlalchemy import SQLAlchemy
+import sqlalchemy
 from webscraper.Anirate.spiders.MyAnimeList import *
+from twisted.internet import reactor
 
 
 app = Flask('AnirateAPI')
@@ -17,7 +18,6 @@ with open('backend/webscraper/watchingZirolet.json', 'r') as file:
 data = json.loads(data)
 data = data[0]['data']
 
-db = SQLAlchemy(app)
 
 
 
@@ -40,21 +40,33 @@ class Watching(Resource): #Must implement webscraper here, in order to pass user
         1. Get: "anime_title":"Jigokuraku",
         2. Get: "anime_image_path":"https:\/\/cdn.....", Yes get rid of the backward slashes
         """
-        print(data.count('"anime_title"')) #This is correct
-        reg = re.compile(r'"anime_title":"(.*?)"')
-        titles = reg.findall(data)
-        reg = re.compile(r'"anime_image_path":"(.*?)"')
-        srcs = reg.findall(data)
-        for i in range(len(srcs)):
-            srcs[i] = srcs[i].replace('\\', '')
-        return [{'title': title, 'src': src} for title, src in zip(titles, srcs)]
+        runner = CrawlerRunner(settings = {
+            "FEEDS":{
+                f'backend/webscraper/Anirate/watchingStore/{username}.json': {'format': 'json'}
+            }
+        })
+        d = runner.crawl(MyAnimeListWatchingSpider, start_urls=[f'https://myanimelist.net/animelist/{username}?status=1'])
+        reactor.run()
+        d.addBoth(lambda _: reactor.stop())
+        #Now the file with the username would be updated everytime they go to this link
+        with open(f'backend/webscraper/Anirate/watchingStore/{username}.json','r') as file:
+            data = file.read()
+        data = json.loads(data)
+        return data
 api.add_resource(Watching, '/watching/<username>')
     
 
 def recentJob(t):
     print("Checking for the latest episodes...")
     #Needs to rerun the RecentSpider spider:
-    process = CrawlerProcess()
+    process = CrawlerProcess(settings = {
+        "FEEDS":{
+            'backend/webscraper/Anirate/Anirate.json': {
+                'format': 'json',
+                'overwrite': 'True',
+            }
+        }
+    })
     process.crawl(MyAnimeListRecentSpider)
     process.start()
     #At this point, the 'Anirate.json' file is updated
@@ -70,5 +82,6 @@ def recentJob(t):
 
 
 if __name__ == '__main__':
+    recentJob('Something')
     schedule.every().day.at("01:00").do(recentJob,"Something")
     app.run()
