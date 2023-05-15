@@ -26,10 +26,15 @@ class MyAnimeListWatchingSpider(scrapy.Spider):
 
     def parse(self, response): #This is complicated, because this itself returns a big json file
         data = {'data': response.css('table').xpath('@data-items').get()}
+        data = data['data']
         reg = re.compile(r'"anime_title":"(.*?)"')
         titles = reg.findall(data)
         reg = re.compile(r'"anime_image_path":"(.*?)"')
         srcs = reg.findall(data)
         for i in range(len(srcs)):
             srcs[i] = srcs[i].replace('\\', '')
-        yield [{'title': title, 'src': src} for title, src in zip(titles, srcs)]
+        for title, src in zip(titles, srcs):
+            yield{
+                'title': title,
+                'src': src,
+            }

@@ -3,3 +3,4 @@
         - Fixed with "overwrite": "True"
 2. Test the "reset" method from the "WatchingSpider"
 3. Test to make sure the schedule is working
+    - Fixed

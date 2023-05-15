@@ -8,8 +8,8 @@ export default function Watching(){
     async function getWatching(){
         const response = await fetch(`http://127.0.0.1:5000/watching/${username}`)
         let data = await response.json()
-        console.log(data)
-        setItems(data)
+        console.log(data['items'])
+        setItems(data['items'])
     }
 
     useEffect(() => {

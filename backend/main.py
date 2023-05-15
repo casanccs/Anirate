@@ -1,30 +1,32 @@
-from flask import Flask
+from flask import Flask, Response
 from flask_restful import Resource, Api
 import json
 from flask_cors import CORS
-import re
-import schedule
-import time
 import sqlalchemy
-from webscraper.Anirate.spiders.MyAnimeList import *
-from twisted.internet import reactor
-
+import requests
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask('AnirateAPI')
 CORS(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://users.sqlite3'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 api = Api(app)
-with open('backend/webscraper/watchingZirolet.json', 'r') as file:
-    data = file.read()
-data = json.loads(data)
-data = data[0]['data']
 
+db = SQLAlchemy(app)
 
+class users(db.Model):
+    _id = db.Column("id", db.Integer, primary_key=True)
+    username = db.Column(db.String(200))
+    email = db.Column(db.String(200))
+
+    def __init__(self, username, email,):
+        self.username = username
 
 
 class Recent(Resource):
     #How can I run the "RecentSpider" once a day at a certain time
     def get(self):
-        with open('backend/webscraper/Anirate/Anirate.json', 'r') as file:
+        with open('backend/Anirate.json', 'r') as file:
             data = file.read()
         data = json.loads(data)
         return data
@@ -34,45 +36,27 @@ api.add_resource(Recent, '/recents')
 class Watching(Resource): #Must implement webscraper here, in order to pass username to URL
 
     def get(self, username):
-        #The idea is I want to run the spider and redo this
+        resp = requests.get('http://localhost:9080/crawl.json?spider_name=MALWatching&start_requests=true')
+        data = resp.json()['items']
+        print(data)
+        #Set database up now:
         """
-        The issue is that all the data is in a huge ugly string. I need to be able parse the string.
-        1. Get: "anime_title":"Jigokuraku",
-        2. Get: "anime_image_path":"https:\/\/cdn.....", Yes get rid of the backward slashes
+        1. In the database, get the current user and their "Watching" list
+        2. Delete all of their list
+        3. Immediately after, set this new "watching" list to belong to the user.
         """
-        runner = CrawlerRunner(settings = {
-            "FEEDS":{
-                f'backend/webscraper/Anirate/watchingStore/{username}.json': {'format': 'json'}
-            }
-        })
-        d = runner.crawl(MyAnimeListWatchingSpider, start_urls=[f'https://myanimelist.net/animelist/{username}?status=1'])
-        reactor.run()
-        d.addBoth(lambda _: reactor.stop())
-        #Now the file with the username would be updated everytime they go to this link
-        with open(f'backend/webscraper/Anirate/watchingStore/{username}.json','r') as file:
-            data = file.read()
-        data = json.loads(data)
-        return data
+        return Response(
+            resp.text, status=resp.status_code, content_type=resp.headers['content-type'],
+        )
+
 api.add_resource(Watching, '/watching/<username>')
     
 
 def recentJob(t):
-    print("Checking for the latest episodes...")
-    #Needs to rerun the RecentSpider spider:
-    process = CrawlerProcess(settings = {
-        "FEEDS":{
-            'backend/webscraper/Anirate/Anirate.json': {
-                'format': 'json',
-                'overwrite': 'True',
-            }
-        }
-    })
-    process.crawl(MyAnimeListRecentSpider)
-    process.start()
-    #At this point, the 'Anirate.json' file is updated
-    #Done!
+    #This runs once a day, at the same time the WebScraper runs
     signedIn = False
     if signedIn:
+        print("Checking for the latest episodes...")
         #Once the update occured and the file is changed, we must check:
             #If any of the anime's that is in the json e.x. {title: "Mashle"...,} are in the user's
             #"watching" list that is part of the database of Flask.
@@ -82,6 +66,5 @@ def recentJob(t):
 
 
 if __name__ == '__main__':
-    recentJob('Something')
-    schedule.every().day.at("01:00").do(recentJob,"Something")
+    db.create_all()
     app.run()
