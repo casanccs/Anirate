@@ -1,9 +1,8 @@
 import {useEffect, useState} from 'react'
 
-export default function Watching(){
+export default function Watching({username}){
 
     const [items, setItems] = useState([])
-    const [username, setUsername] = useState('zirolet')
 
     async function getWatching(){
         const response = await fetch(`http://127.0.0.1:5000/watching/${username}`)
@@ -14,7 +13,7 @@ export default function Watching(){
 
     useEffect(() => {
         getWatching()
-    },[])
+    })
 
     const current = items.map(anime => {
         return (

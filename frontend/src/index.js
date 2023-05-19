@@ -6,6 +6,8 @@ import NavBar from './routes/NavBar';
 import ErrorPage from "./error-page";
 import Recents from './pages/Recents'
 import Watching from './pages/Watching'
+import Login from './pages/Login'
+import Register from './pages/Register'
 
 const router = createBrowserRouter([
   {
@@ -19,8 +21,16 @@ const router = createBrowserRouter([
       },
       {
         path: 'watching/',
-        element: <Watching />,
-      }
+        element: <Watching username={'zirolet'}/>,
+      },
+      {
+        path: 'login/',
+        element: <Login />,
+      },
+      {
+        path: 'register/',
+        element: <Register />,
+      },
     ]
   }
 ])
