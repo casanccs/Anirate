@@ -1,6 +1,11 @@
 import { Link } from "react-router-dom";
+import Cookies from "universal-cookie";
+import jwt from "jwt-decode";
+
 
 export default function Login(){
+    const cookies = new Cookies();
+
 
     async function login(){
         let username = document.querySelector('#username').value
@@ -19,8 +24,13 @@ export default function Login(){
         })
         let data = await response.json()
         console.log(data)
-        if (data['data'] === "Successful"){
-            window.location.replace('/recents')
+        if (data['token']){
+            const decoded = jwt(data['token']);
+            cookies.set("jwt_authorization", data['token'], {
+                expires: new Date(decoded.exp * 1000),
+                domain: 'localhost',
+            })
+            //window.location.replace('/recents');
         }
         // else{
         //     window.location.replace('/register')

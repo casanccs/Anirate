@@ -19,7 +19,7 @@ export default function Register(){
         })
         let data = await response.json()
         console.log(data)
-        window.location.replace('/recents')
+        //window.location.replace('/recents')
     }
 
     return (
