@@ -7,6 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 import jwt
 import datetime
+from sqlalchemy.orm import relationship, backref
 
 
 
@@ -20,12 +21,43 @@ app.app_context().push()
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 
+class Watching(db.Model):
+    __table__ = 'watchings'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    anime_id = db.Column(db.Integer, db.ForeignKey('animes.id'))
+
+    user = relationship('User', backref=backref("watchings", cascade="all, delete-orphan"))
+    anime = relationship('Anime', backref=backref("watchings", cascade="all, delete-orphan"))
+
 class User(db.Model):
+    __table__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), nullable=False, unique=True)
     password = db.Column(db.String(50), nullable=False)
 
+    animes = relationship('Anime', secondary=Watching, backref='watchers')
 
+
+class Anime(db.Model):
+    __table__ = 'animes'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100))
+    profiles = db.Column(db.Fo)
+    cur_episode = db.Column(db.Integer)
+
+#How the anime/user and notification is going to work
+"""
+    This all when we get the recent anime!! Which means this logic will be in the scheduler
+    1. As anime gets pulled into the "Anirate.json" file:
+    2. Loop through each dictionary and check to see if that anime is in the database by using the
+        title key in the dictionary and title field in the model.
+    3. If it is NOT in the database, add it into the database, and *SIGNAL* to everyone who has this
+        anime in their "animes" list. (Will go over below)
+    4. If it IS in the database, check to see if the current episode matches the one that is in
+        the database. Do nothing if it matches. If it does NOT match, *SIGNAL* to everyone who has this
+        anime in their "animes" list. (Will go over below)
+"""
 
 
 class Login(Resource):
