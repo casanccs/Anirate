@@ -1,6 +1,9 @@
-1. Test to make sure the Path's work from the spiders (Works because of Crawler settings)
-    - Everytime I start the server, Anirate.json gets APPENDED to instead of overwritten
-        - Fixed with "overwrite": "True"
-2. Test the "reset" method from the "WatchingSpider"
-3. Test to make sure the schedule is working
-    - Fixed
+One of the hardest parts: The Notification System
+
+Current idea:
+
+1. Global timer in front-end using React-Native
+2. Once timer sets off, send a request to Backend with jwt_authorization.
+3. Flask gets the request, gets the user with that specific jwt_authorization.
+4. Runs the recent() and signal() function (Move both of the functions into a single view)
+5. At the end of the signal function, it will return a response back to client which will indicate if they should receieve the notfication or not.
