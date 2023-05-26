@@ -2,8 +2,21 @@ One of the hardest parts: The Notification System
 
 Current idea:
 
-1. Global timer in front-end using React-Native
+1. Global timer in front-end using React-Native (Done)
 2. Once timer sets off, send a request to Backend with jwt_authorization.
 3. Flask gets the request, gets the user with that specific jwt_authorization.
 4. Runs the recent() and signal() function (Move both of the functions into a single view)
 5. At the end of the signal function, it will return a response back to client which will indicate if they should receieve the notfication or not.
+
+This worked!!! ^^ 
+
+
+But now there is a new issue:
+
+When Flask gets the request and checks for the recent anime, it grabs the newest episodes and only signals IF there is a change from the
+    NEW "Anirate.json" and its "Anime" model. But once that person is finished, the "Anime" model is already changed. Instead what should happen.
+A potential fix for that could be:
+1. Do NOT commit the database with the change.
+2. The person who gets onto the website will get a request, but make sure only when they enter the website for the first time it occurs.
+    This makes it so that other people will be able to get signaled with the data.
+3. At 11am, "Anirate.json" will finally update the Anime database and commit the changes.

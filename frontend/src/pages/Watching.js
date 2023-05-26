@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react'
 import Cookies from "universal-cookie";
+import { Link } from 'react-router-dom';
 
 export default function Watching(){
 
@@ -37,11 +38,13 @@ export default function Watching(){
     if (items){
         current = items.map(anime => {
             return (
-                <div key={anime.title}>
-                    <img src={anime.src} alt={anime.title}/>
-                    <br/>
-                    <h2>{anime.title}</h2>
-                </div>
+                <Link key={anime.title} to={`/watch/?anime=${anime.title.replace(/[[\]&\:.]+/g, '').replace(/ /g, "-").toLowerCase()}`}>
+                    <div >
+                        <img src={anime.src} alt={anime.title}/>
+                        <br/>
+                        <h2>{anime.title}</h2>
+                    </div>
+                </Link>
             )
         })
     }

@@ -10,6 +10,59 @@ import datetime
 from sqlalchemy.orm import relationship, backref
 import os
 
+def signal(animeObj, user):
+    """
+        Because animeObj has a Many-To-Many relationship with User, we have a list of all the users who are watching this anime currently.
+        So we can signal to each user individually by using a for loop.
+    """ 
+    if animeObj in user.watching:
+        print(f'{user.username}: {animeObj.title} release Episode {animeObj.cur_episode} !!')
+        return True
+    return False
+
+
+def recent(user):
+    #How the anime/user and notification is going to work
+    """
+        This all when we get the recent anime!! Which means this logic will be in the scheduler
+        1. As anime gets pulled into the "Anirate.json" file:
+        2. Loop through each dictionary and check to see if that anime is in the database by using the
+            title key in the dictionary and title field in the model.
+        3. If it is NOT in the database, add it into the database, and *SIGNAL* to everyone who has this
+            anime in their "watching" list. (Will go over below) [THIS IS NOT POSSIBLE BECAUSE AN ANIME IN A "WATCHING" LIST WILL BE CREATED IN DB!]
+        4. If it IS in the database, check to see if the current episode matches the one that is in
+            the database. Do nothing if it matches. If it does NOT match, *SIGNAL* to everyone who has this
+            anime in their "animes" list. (Will go over below)
+    """
+    os.system('scrapy crawl MyAnimeListRecent -O ../Anirate.json')
+    """Step 1:"""
+    # 'Anirate.json' is now updated. Get the data from the file
+    with open('Anirate.json', 'r') as file:
+            data = file.read()
+    data = json.loads(data)
+    # confirmed data is now the data.
+    """Step 2:"""
+    for anime in data:
+        anime['notificate'] = False #Make new key,value for that Anime's dictionary
+        animeObj = Anime.query.filter_by(title=anime['title']).first() # NOTE: Only one should pop up #
+        if animeObj: # Can be the anime OR None
+            # The anime is already in the database
+            """Step 4:"""
+            if animeObj.cur_episode == anime['epNum']: # Episode number already matches, do not SIGNAL
+                pass
+            else: # Episode number does NOT match. SIGNAL
+                animeObj.cur_episode=anime['epNum']
+                anime['notificate'] = signal(animeObj, user)
+        else:
+            """Step 3:"""
+            # The anime is not in the database. SIGNAL
+            animeObj = Anime(title=anime['title'], cur_episode=anime['epNum'])
+            anime['notificate'] = signal(animeObj, user)
+    '''
+    At this point, it will return a list of dictionaries with the: {title, epNum, notificate}
+    So if there were 10 new episodes in Anirate.json, the new list will be the same but with notificate tacked on.
+    '''
+    return data
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask('AnirateAPI')
@@ -93,7 +146,6 @@ api.add_resource(Recent, '/recents')
  
 class Watching(Resource): #Must implement webscraper here, in order to pass username to URL
 
-    @cross_origin(supports_credentials=True)
     def post(self):
         data = request.get_json()
         token = None
@@ -107,7 +159,6 @@ class Watching(Resource): #Must implement webscraper here, in order to pass user
         except:
             return jsonify({'message': 'Token is invalid!'})
         current_user = User.query.filter_by(username=data['username']).first()
-        print(current_user.username)
         username = current_user.username
         resp = requests.get(f'http://localhost:9080/crawl.json?spider_name=MALWatching&url=https://myanimelist.net/animelist/{username}?status=1')
         data = resp.json()['items']
@@ -131,20 +182,27 @@ class Watching(Resource): #Must implement webscraper here, in order to pass user
         db.session.commit()
         print(current_user.watching)
         return jsonify({'data': data, 'username': current_user.username})
-    
 api.add_resource(Watching, '/watching')
-    
 
-def recentJob(t):
-    #This runs once a day, at the same time the WebScraper runs
-    signedIn = False
-    if signedIn:
-        print("Checking for the latest episodes...")
-        #Once the update occured and the file is changed, we must check:
-            #If any of the anime's that is in the json e.x. {title: "Mashle"...,} are in the user's
-            #"watching" list that is part of the database of Flask.
-        pass
 
+class CheckNewEpisodes(Resource):
+
+    def post(self):
+        data = request.get_json()
+        token = None
+        try:
+            token = data['token']
+        except:
+            return jsonify({'message': 'Token is missing!'})
+        try:
+            data = jwt.decode(token, app.config['SECRET_KEY'], 'HS256')
+        except:
+            return jsonify({'message': 'Token is invalid!'})
+        current_user = User.query.filter_by(username=data['username']).first()
+        print(current_user.username)
+        # Confirmed we got the user
+        return jsonify(recent(current_user)) # Remember that recent(current_user) is just the data with 'notificate' tacked on
+api.add_resource(CheckNewEpisodes, '/check')
 
 
 

@@ -8,6 +8,7 @@ import Recents from './pages/Recents'
 import Watching from './pages/Watching'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import Watch from './pages/Watch'
 
 const router = createBrowserRouter([
   {
@@ -21,7 +22,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'watching/',
-        element: <Watching username={'zirolet'}/>,
+        element: <Watching/>,
       },
       {
         path: 'login/',
@@ -31,9 +32,15 @@ const router = createBrowserRouter([
         path: 'register/',
         element: <Register />,
       },
+      {
+        path: 'watch/',
+        element: <Watch />,
+      },
     ]
   }
 ])
+
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
