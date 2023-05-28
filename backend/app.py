@@ -95,7 +95,7 @@ class Anime(db.Model):
     __tablename__ = 'anime'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
-    cur_episode = db.Column(db.Integer, default=0) # Turns out this is a String
+    cur_episode = db.Column(db.String, default="Episode 1") # Turns out this is a String
 
     def __repr__(self):
         return f'<Anime {self.title}, ep: {self.cur_episode}>'

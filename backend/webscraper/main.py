@@ -6,9 +6,9 @@ import json
 
 
 def recent():
-    os.system('scrapy crawl MyAnimeListRecent -O ../Anirate.json')
+    os.system('scrapy crawl MyAnimeListRecent -O backend/Anirate.json')
     # 'Anirate.json' is now updated. Get the data from the file
-    with open('../Anirate.json', 'r') as file:
+    with open('backend/Anirate.json', 'r') as file:
             data = file.read()
     data = json.loads(data)
     # confirmed data is now the data.
@@ -32,6 +32,7 @@ def recent():
     
 
 print('Scheduler initialised')
+recent()
 schedule.every().day.at("11:00").do(recent)
 print('Next job is set to run at: ' + str(schedule.next_run()))
 
