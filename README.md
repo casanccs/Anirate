@@ -2,20 +2,20 @@
 
 # Running the Anirate Program
 1. Start a virtual environment in parent "Anirate" directory.
-2. Now install dependencies in the parent "Anirate" directory with:
+2. Now install dependencies in the parent "Anirate" directory with:  
     $ pip install -r requirements.txt
-3. Run the Flask Web Server in the "backend" directory with:
+3. Run the Flask Web Server in the "backend" directory with:  
     $ python app.py
-4. Run the recent anime update Scraper by opening ANOTHER terminal (in same venv) and running this command in the parent "Anirate" directory:
+4. Run the recent anime update Scraper by opening ANOTHER terminal (in same venv) and running this command in the parent "Anirate" directory:  
     $ python -m backend.webscraper.main
 5. Start ANOTHER terminal (in same venv) and run this command in "Anirate" directory to start the ScrapyRT Web Server:
-    $ scrapyrt
+    $ scrapyrt  
 5. Run the react server by opening another terminal and running these commands in the "frontend" directory (Will start on Port 3000):
-    $ npm install --force
-    $ npm start
+    $ npm install --force  
+    $ npm start  
 6. Pull and run the Docker image for the *consumet-api* to allow anime streaming (Make sure Docker Desktop is running. React will be on Port 3000):
-    $ docker pull riimuru/consumet-api
-    $ docker run -p 3500:3000 riimuru/consumet-api
+    $ docker pull riimuru/consumet-api  
+    $ docker run -p 3500:3000 riimuru/consumet-api  
 
 # How to use the Anirate Program
 1. Sign up for an account, ensuring that your username is the same as your username in "MyAnimeList", then login with that account.
