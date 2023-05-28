@@ -38,7 +38,7 @@ export default function Watching(){
     if (items){
         current = items.map(anime => {
             return (
-                <Link key={anime.title} to={`/watch/?anime=${anime.title.replace(/[[\]&\:.]+/g, '').replace(/ /g, "-").toLowerCase()}`}>
+                <Link key={anime.title} to={`/watch/?anime=${anime.title.replace(/[[\]&\:.()!]+/g, '').replace(/ /g, "-").toLowerCase()}&epNum=${anime.epNum}`}>
                     <div >
                         <img src={anime.src} alt={anime.title}/>
                         <br/>

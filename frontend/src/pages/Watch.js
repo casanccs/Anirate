@@ -1,13 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Hls from "hls.js";
 import { useSearchParams } from "react-router-dom";
 export default function Home(){
 
+    const [show, setShow] = useState(false)
     const [searchParams, setSearchParams] = useSearchParams();
     const anime = searchParams.get('anime')
     const epNum = searchParams.get('epNum')
 
     async function getData(){
+
         /*
             In order for me to get the correct url, I have to send a request to the anime API
             - When I click on 
@@ -34,6 +36,9 @@ export default function Home(){
         let data = await response.json();
         console.log(data);
         let x = data['sources'][3]['url'];
+        if (x){
+            setShow(true)
+        }
         if(Hls.isSupported())
         {
             var video = document.getElementById('video');
@@ -60,14 +65,23 @@ export default function Home(){
         getData();
     },[])
 
+    // if (!show){
+    //     return(
+    //         <div>
+    //             <h1>This service does not have that anime!</h1>
+    //         </div>
+    //     )
+    // }
     return(
     <div>
         {/* <video width="352" height="198" controls>
             <source src={vidURL} type="application/x-mpegURL" />
         </video> */}
+        {!show ? <h1>This service does not have that anime!</h1>:
+            <h1>Showing</h1>
+        }
         <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
         <video id="video" controls></video>
-        
     </div>
     )
 
