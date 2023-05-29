@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react'
 import { Link } from 'react-router-dom'
+import './Recents.css'
 export default function Recents(){
 
     const [recents, setRecents] = useState([])
@@ -16,8 +17,8 @@ export default function Recents(){
 
     const recentItems = recents.map(anime => {
         return (
-            <Link key={anime.title} to={`/watch/?anime=${anime.title.replace(/[[\]&\:.()!]+/g, '').replace(/ /g, "-").toLowerCase()}&epNum=${anime.epNum}`}>
-                <div >
+            <Link key={anime.title} to={`/watch/?anime=${anime.title.replace(/[[\]&\:.()!]+/g, '').replace(/ /g, "-").toLowerCase()}&epNum=${anime.epNum}`} style={{ textDecoration: 'none' }}>
+                <div className='item'>
                     <img src={anime.img} alt={anime.title}/>
                     <br/>
                     <h2>{anime.title}</h2>

@@ -20,4 +20,4 @@
 # How to use the Anirate Program
 1. Sign up for an account, ensuring that your username is the same as your username in "MyAnimeList", then login with that account.
 2. On every hard refresh, you will get a notification if a new episode is released that is on your "Watching" list.
-3. You can click on an anime in the "Recents" or "Watching" link to watch the episode if it is available on the the streaming platform!
+3. You can click on an anime in the "Recents" or "Watching" link to watch the episode if it is available on the streaming platform!

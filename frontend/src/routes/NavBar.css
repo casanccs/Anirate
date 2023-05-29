@@ -1,4 +1,14 @@
 #navbar{
     display: flex;
     align-items: center;
+    background-color: rgb(29, 29, 80);
+    margin-bottom: -22px;
+}
+
+#navbar *{
+    color: white;
+}
+
+#navbar h1{
+    margin-left: 20px;
 }

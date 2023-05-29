@@ -30,11 +30,11 @@ export default function Login(){
                 expires: new Date(decoded.exp * 1000),
                 domain: 'localhost',
             })
-            //window.location.replace('/recents');
+            window.location.replace('/recents');
         }
-        // else{
-        //     window.location.replace('/register')
-        // }
+        else{
+           window.location.replace('/register');
+        }
     }
 
 

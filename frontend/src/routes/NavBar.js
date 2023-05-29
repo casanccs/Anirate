@@ -43,7 +43,8 @@ export default function NavBar() {
   }, [])
 
   async function logout(){
-    //await fetch("http://127.0.0.1:5000/logout");
+    // This does not refresh the page
+    document.querySelector('.log').textContent = "Login"
     cookies.remove("jwt_authorization");
   }
 
@@ -58,22 +59,35 @@ export default function NavBar() {
     console.log("Testing")
   }
 
-  return (
-    <>
-      <div id="navbar">
-        <h1>Anirate</h1>
-        <Link to='/home'>Home</Link>
-        <Link to='/recents'>Recents</Link>
-        <Link to='/watching'>Watching</Link>
-        <Link to='/login'>Login</Link>
-        <input type='text' placeholder="Search" />
-        <input type='button' value='Submit' />
-        <Link to='/login' onClick={logout} >Logout</Link>
-        <button onClick={notification}>Notificate</button>
-      </div>
-      <div id="detail">
-        <Outlet />
-      </div>
-    </>
-  );
+  if (cookies.get('jwt_authorization')){
+    return (
+      <>
+        <div id="navbar">
+        <Link style={{ textDecoration: 'none' }} to='/home'><h1>Anirate</h1></Link>
+          <Link style={{ textDecoration: 'none' }} to='/recents' className='recents'>Recents</Link>
+          <Link style={{ textDecoration: 'none' }} to='/watching' className='watching'>Watching</Link>
+          <Link style={{ textDecoration: 'none' }} to='/login' onClick={logout} className='log'>Logout</Link>
+        </div>
+        <div id="detail">
+          <Outlet />
+        </div>
+      </>
+    );
+  }
+  else{
+    return (
+      <>
+        <div id="navbar">
+          <Link style={{ textDecoration: 'none' }} to='/home'><h1>Anirate</h1></Link>
+          <Link style={{ textDecoration: 'none' }} to='/recents' className='recents'>Recents</Link>
+          <Link style={{ textDecoration: 'none' }} to='/watching' className='watching'>Watching</Link>
+          <Link style={{ textDecoration: 'none' }} to='/login' className='log'>Login</Link>
+        </div>
+        <div id="detail">
+          <Outlet />
+        </div>
+      </>
+    );
+  }
+
 }

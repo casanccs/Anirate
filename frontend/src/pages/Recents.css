@@ -1,0 +1,53 @@
+.Recents{
+    background-image: url("Anime Wallpaper.jpg");
+    background-size: cover;
+}
+
+.Recents h1{
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: white;
+    background-color: rgb(47, 47, 47);
+}
+
+.items{
+    display: grid;
+    grid-template-columns: 350px 350px 350px 350px;
+    row-gap: 75px;
+    column-gap: 30px;
+    position: relative;
+    width: fit-content;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+.item{
+    background-color: rgba(57, 57, 57, 0.681);
+    height: 450px;
+    position: relative;
+}
+
+.item *{
+    color: white;
+    font-weight: normal;
+    position: relative;
+    width: fit-content;
+    left: 50%;
+    transform: translate(-50%);
+    text-align: center;
+}
+
+.item img{
+    margin-top: 15px;
+}
+
+.item h2{
+    font-size: 23px;
+    margin-top: 12px;
+}
+
+.item h3{
+    position: absolute;
+    top: 395px;
+}

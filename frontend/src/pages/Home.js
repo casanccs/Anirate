@@ -2,7 +2,7 @@
 export default function Home(){
     return (
         <div>
-            <h1>You are logged in!</h1>
+            <h1>Welcome to Anirate!</h1>
         </div>
     )
 }
