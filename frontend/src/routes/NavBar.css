@@ -10,5 +10,29 @@
 }
 
 #navbar h1{
+    margin: 5px;
     margin-left: 20px;
+    font-weight: light;
+    font-size: 45px;
+}
+
+.recents{
+    font-size: 30px;
+    position: absolute;
+    left: 45%;
+    transform: translate(-50%);
+}
+
+.watching{
+    font-size: 30px;
+    position: absolute;
+    left: 55%;
+    transform: translate(-50%);
+}
+
+.log{
+    font-size: 30px;
+    position: absolute;
+    left: 98%;
+    transform: translate(-100%);
 }

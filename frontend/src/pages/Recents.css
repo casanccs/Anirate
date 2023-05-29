@@ -11,10 +11,10 @@
     background-color: rgb(47, 47, 47);
 }
 
-.items{
+.Recents .items{
     display: grid;
     grid-template-columns: 350px 350px 350px 350px;
-    row-gap: 75px;
+    row-gap: 30px;
     column-gap: 30px;
     position: relative;
     width: fit-content;
@@ -22,13 +22,13 @@
     transform: translate(-50%);
 }
 
-.item{
+.Recents .item{
     background-color: rgba(57, 57, 57, 0.681);
     height: 450px;
     position: relative;
 }
 
-.item *{
+.Recents .item *{
     color: white;
     font-weight: normal;
     position: relative;
@@ -38,16 +38,16 @@
     text-align: center;
 }
 
-.item img{
+.Recents .item img{
     margin-top: 15px;
 }
 
-.item h2{
+.Recents .item h2{
     font-size: 23px;
     margin-top: 12px;
 }
 
-.item h3{
+.Recents .item h3{
     position: absolute;
     top: 395px;
 }

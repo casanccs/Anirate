@@ -1,6 +1,7 @@
-import {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react';
 import Cookies from "universal-cookie";
 import { Link } from 'react-router-dom';
+import './Watching.css';
 
 export default function Watching(){
 
@@ -34,13 +35,13 @@ export default function Watching(){
         getWatching()
     },[])
 
-    let current;
+    let current = <h1>Loading...</h1>;
     if (items){
         current = items.map(anime => {
             console.log(anime)
             return (
-                <Link key={anime.title} to={`/watch/?anime=${anime.title.replace(/[[\]&\:.()!]+/g, '').replace(/ /g, "-").toLowerCase()}&epNum=${anime.epNum}`}>
-                    <div key={anime.title}>
+                <Link key={anime.title} to={`/watch/?anime=${anime.title.replace(/[[\]&\:.()!]+/g, '').replace(/ /g, "-").toLowerCase()}&epNum=${anime.epNum}`} style={{ textDecoration: 'none' }}>
+                    <div className='item'>
                         <img src={anime.src} alt={anime.title}/>
                         <br/>
                         <h2>{anime.title}</h2>
@@ -51,9 +52,11 @@ export default function Watching(){
     }
 
     return (
-        <div className='items'>
-            <h1>Watch list for: {user}</h1>
-            {current}
+        <div className='Watching'>
+            <h1>Current Anime You Are Watching</h1>
+            <div className='items'>
+                {current}
+            </div>
         </div>
     )
     

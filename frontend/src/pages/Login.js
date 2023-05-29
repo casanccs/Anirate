@@ -39,17 +39,31 @@ export default function Login(){
 
 
     return (
-        <div>
+        <div className="Register">
             <h1>Login</h1>
             <Link to='/register'>Don't have an account? Register!</Link>
             <form method="post" action="/login">
                 <label>Username: </label>
-                <input id='username' type='text' name='username' />
+                <br />
+                <input id='username' type='text' name='username' onKeyDown={
+                    e => {
+                        if (e.key === 'Enter') {
+                            login()
+                          }
+                    }
+                }/>
                 <br />
                 <label>Password: </label>
-                <input id='password' type='password' name='password' />
                 <br />
-                <input type='button' value='Login' onClick={login} />
+                <input id='password' type='password' name='password' onKeyDown={
+                    e => {
+                        if (e.key === 'Enter') {
+                            login()
+                          }
+                    }
+                }/>
+                <br />
+                <input id='submit' type='button' value='Login' onClick={login} />
             </form>
         </div>
     )

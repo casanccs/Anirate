@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import './Register.css'
 
 export default function Register(){
 
@@ -19,21 +20,35 @@ export default function Register(){
         })
         let data = await response.json()
         console.log(data)
-        //window.location.replace('/recents')
+        window.location.replace('/login')
     }
 
     return (
-        <div>
+        <div className="Register">
             <h1>Register</h1>
             <Link to='/login'>Already have an account? Login!</Link>
             <form method="post" action="/login">
-                <label>Username: </label>
-                <input id='username' type='text' name='username' />
+                <label>Username: (Make sure it is the SAME USERNAME is in MyAnimeList!!!)</label>
+                <br/>
+                <input id='username' type='text' name='username' onKeyDown={
+                    e => {
+                        if (e.key === 'Enter') {
+                            Create()
+                          }
+                    }
+                }/>
                 <br />
                 <label>Password: </label>
-                <input id='password' type='password' name='password' />
+                <br/>
+                <input id='password' type='password' name='password' onKeyDown={
+                    e => {
+                        if (e.key === 'Enter') {
+                            Create()
+                          }
+                    }
+                }/>
                 <br />
-                <input type='button' value='Register' onClick={Create} />
+                <input id='submit' type='button' value='Register' onClick={Create} />
             </form>
         </div>
     )

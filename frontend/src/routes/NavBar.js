@@ -45,18 +45,9 @@ export default function NavBar() {
   async function logout(){
     // This does not refresh the page
     document.querySelector('.log').textContent = "Login"
-    cookies.remove("jwt_authorization");
-  }
-
-  function notification(){
-    addNotification({
-      title: 'New Episode!',
-      message: 'From some anime',
-      duration: 5000,
-      native: true,
-      onClick: () => window.location="login/"
-    })
-    console.log("Testing")
+    document.querySelector('.watching').style.display = 'none'
+    document.querySelector('.recents').style.left = '50%'
+    cookies.remove("jwt_authorization")
   }
 
   if (cookies.get('jwt_authorization')){
@@ -79,8 +70,7 @@ export default function NavBar() {
       <>
         <div id="navbar">
           <Link style={{ textDecoration: 'none' }} to='/home'><h1>Anirate</h1></Link>
-          <Link style={{ textDecoration: 'none' }} to='/recents' className='recents'>Recents</Link>
-          <Link style={{ textDecoration: 'none' }} to='/watching' className='watching'>Watching</Link>
+          <Link style={{ textDecoration: 'none', left: "50%"}} to='/recents' className='recents'>Recents</Link>
           <Link style={{ textDecoration: 'none' }} to='/login' className='log'>Login</Link>
         </div>
         <div id="detail">

@@ -1,0 +1,48 @@
+.Register{
+    position: relative;
+    width: fit-content;
+    left: 50%;
+    top: 200px;
+    transform: translate(-50%);
+    background-color: rgba(31, 13, 113, 0.638);
+    padding: 50px;
+    border-radius: 20px;
+    border: 1px solid white;
+}
+
+.Register *{
+    color: white;
+}
+
+.Register a{
+    font-size: 20px;
+}
+
+.Register h1{
+    text-align: center;
+    margin: 0px;
+    margin-bottom: 20px;
+    font-size: 50px;
+}
+
+.Register label{
+    font-size: 35px;
+}
+
+.Register input{
+    font-size: 35px;
+    background-color: rgba(92, 92, 92, 0.598);
+    border: 0;
+}
+
+.Register #submit{
+    margin-top: 20px;
+    padding: 10px;
+    background-color: rgba(64, 63, 63, 0.757);
+    border-radius: 20px;
+}
+
+body{
+    background-image: url("night anime.png");
+    background-size: cover;
+}
