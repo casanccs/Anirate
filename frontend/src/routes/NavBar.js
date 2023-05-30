@@ -54,7 +54,7 @@ export default function NavBar() {
     return (
       <>
         <div id="navbar">
-        <Link style={{ textDecoration: 'none' }} to='/home'><h1>Anirate</h1></Link>
+          <h1>Anirate</h1>
           <Link style={{ textDecoration: 'none' }} to='/recents' className='recents'>Recents</Link>
           <Link style={{ textDecoration: 'none' }} to='/watching' className='watching'>Watching</Link>
           <Link style={{ textDecoration: 'none' }} to='/login' onClick={logout} className='log'>Logout</Link>

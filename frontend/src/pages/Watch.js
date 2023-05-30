@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Hls from "hls.js";
 import { useSearchParams } from "react-router-dom";
+import './Watch.css'
 export default function Home(){
 
     const [show, setShow] = useState(false)
